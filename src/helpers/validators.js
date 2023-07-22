@@ -51,13 +51,12 @@ export const validateFieldN1 = R.allPass([
     R.compose(isWhite, getTriangleColor),
 ])
 
-const gte = (n) => (length) => R.gte(length, n)
 const colorFilter = (color) => (arr) => R.filter(el=> el === color, arr)
 
 const getFilterColorsLength = (color) => R.compose(R.length, colorFilter(color), R.values)
 // 2. Как минимум две фигуры зеленые.
 export const validateFieldN2 = R.allPass([
-    R.compose(gte(2), getFilterColorsLength(COLORS.GREEN)),
+    R.compose(R.gte(R.__, 2), getFilterColorsLength(COLORS.GREEN)),
 ])
 
 // 3. Количество красных фигур равно кол-ву синих.
@@ -71,11 +70,13 @@ export const validateFieldN4 = R.allPass([
 ])
 
 // 5. Три фигуры одного любого цвета кроме белого (четыре фигуры одного цвета – это тоже true).
+const greaterThanOrEq3 = R.gte(R.__, 3)
+
 export const validateFieldN5 = R.anyPass([
-    R.compose(gte(3), getFilterColorsLength(COLORS.RED)),
-    R.compose(gte(3), getFilterColorsLength(COLORS.GREEN)),
-    R.compose(gte(3), getFilterColorsLength(COLORS.ORANGE)),
-    R.compose(gte(3), getFilterColorsLength(COLORS.BLUE)),
+    R.compose(greaterThanOrEq3, getFilterColorsLength(COLORS.RED)),
+    R.compose(greaterThanOrEq3, getFilterColorsLength(COLORS.GREEN)),
+    R.compose(greaterThanOrEq3, getFilterColorsLength(COLORS.ORANGE)),
+    R.compose(greaterThanOrEq3, getFilterColorsLength(COLORS.BLUE)),
 ])
 
 // 6. Ровно две зеленые фигуры (одна из зелёных – это треугольник), плюс одна красная. 
